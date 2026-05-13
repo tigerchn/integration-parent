@@ -1,0 +1,11 @@
+spring:
+  autoconfigure:
+    exclude:
+      # 单元测试默认不连本机 Redis，避免无 Redis 时启动失败
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - com.integration.common.redisson.autoconfigure.IntegrationRedissonAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
+
+integration:
+  redisson:
+    enabled: false

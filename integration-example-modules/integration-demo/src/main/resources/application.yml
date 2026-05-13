@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: integration-demo
+  data:
+    redis:
+      # 本地 Redis，无密码：不配置 password；有密码时再取消注释并填写
+      host: 127.0.0.1
+      port: 6379
   autoconfigure:
     exclude:
       # Brave/Micrometer tracing stays on classpath; disable Zipkin HTTP export when no collector (default localhost:9411).
@@ -19,6 +24,9 @@ management:
       probability: 1.0
 
 integration:
+  redisson:
+    # 为 true 且 Redis 可连时注册 RedissonClient；本地无 Redis 请保持 false
+    enabled: false
   openapi:
     title: Integration Demo API
     version: 1.0.0
