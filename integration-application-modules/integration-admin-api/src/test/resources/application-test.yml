@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    generate-unique-name: true
+    url: jdbc:h2:mem:integration_admin;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/rbac-schema.sql
+      data-locations: classpath:db/rbac-data.sql
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - com.integration.common.redis.autoconfigure.IntegrationRedisAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
+
+integration:
+  admin:
+    security:
+      redis-token-blacklist-enabled: false
+      jwt:
+        secret: "integration-admin-jwt-secret-change-me-32b!"
+        expires-in-seconds: 28800
