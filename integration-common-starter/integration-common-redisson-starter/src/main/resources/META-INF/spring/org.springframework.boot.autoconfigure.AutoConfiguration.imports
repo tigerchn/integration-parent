@@ -1,1 +1,2 @@
 com.integration.common.redisson.autoconfigure.IntegrationRedissonAutoConfiguration
+com.integration.common.redisson.autoconfigure.IntegrationRedissonLockAutoConfiguration

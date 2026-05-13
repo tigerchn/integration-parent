@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 /**
  * 可选 Redisson 客户端：仅在 {@code integration.redisson.enabled=true} 时注册 {@link RedissonClient}。
  * <p>单机模式复用 {@link RedisProperties}（与 Spring Data Redis 相同数据源配置）。
+ * <p>启用后还可装配 {@link com.integration.common.redisson.lock.DistributedLockAspect}，对 {@link com.integration.common.redisson.lock.DistributedLock} 注解方法加锁。
  */
 @AutoConfiguration(after = RedisAutoConfiguration.class)
 @ConditionalOnClass(Redisson.class)

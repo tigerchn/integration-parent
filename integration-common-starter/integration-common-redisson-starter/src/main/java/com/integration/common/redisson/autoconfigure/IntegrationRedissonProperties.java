@@ -1,6 +1,7 @@
 package com.integration.common.redisson.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * Redisson 集成开关与可选调优，前缀 {@code integration.redisson}。
@@ -13,6 +14,12 @@ public class IntegrationRedissonProperties {
      * 为 {@code true} 时注册 {@link org.redisson.api.RedissonClient} Bean；默认关闭以免未部署 Redis 时启动失败。
      */
     private boolean enabled = false;
+
+    /**
+     * {@link com.integration.common.redisson.lock.DistributedLock} 相关默认项。
+     */
+    @NestedConfigurationProperty
+    private Lock lock = new Lock();
 
     /**
      * Redisson 客户端名称，便于 Redis MONITOR / 服务端识别。
@@ -59,5 +66,34 @@ public class IntegrationRedissonProperties {
 
     public void setTimeoutMs(int timeoutMs) {
         this.timeoutMs = timeoutMs;
+    }
+
+    public Lock getLock() {
+        return lock;
+    }
+
+    public void setLock(Lock lock) {
+        if (lock != null) {
+            this.lock = lock;
+        }
+    }
+
+    /**
+     * {@code integration.redisson.lock.*}
+     */
+    public static class Lock {
+
+        /**
+         * {@link com.integration.common.redisson.lock.DistributedLock#key()} 为空时拼接默认 key 的前缀。
+         */
+        private String keyPrefix = "integration:lock";
+
+        public String getKeyPrefix() {
+            return keyPrefix;
+        }
+
+        public void setKeyPrefix(String keyPrefix) {
+            this.keyPrefix = keyPrefix;
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.integration.common.tool.json.Jsons;
 import com.integration.common.core.api.ApiResult;
 import com.integration.common.core.api.ResultCode;
 import com.integration.common.core.exception.BizException;
+import com.integration.demo.lock.DemoDistributedLockService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -25,12 +26,15 @@ import java.util.Map;
 public class DemoController {
 
     private final Jsons jsons;
+    private final DemoDistributedLockService distributedLockService;
 
     /**
-     * @param jsons JSON 序列化工具
+     * @param jsons                 JSON 序列化工具
+     * @param distributedLockService 演示 Redisson {@code @DistributedLock} 的入口（见 {@link #distributedLockSample}）
      */
-    public DemoController(Jsons jsons) {
+    public DemoController(Jsons jsons, DemoDistributedLockService distributedLockService) {
         this.jsons = jsons;
+        this.distributedLockService = distributedLockService;
     }
 
     /** 简单存活检测 */
@@ -59,6 +63,18 @@ public class DemoController {
     @Operation(summary = "Throws business exception")
     public ApiResult<Void> bizError() {
         throw new BizException(ResultCode.BUSINESS_ERROR, "demo business failure");
+    }
+
+    /**
+     * 分布式锁示例：委托 {@link DemoDistributedLockService#runUnderLock(String)}，其方法上带有
+     * {@link com.integration.common.redisson.lock.DistributedLock}（SpEL 按 {@code resourceKey} 拼锁名）。
+     * <p>将 {@code integration.redisson.enabled} 设为 {@code true} 且 Redis 可用时才会真正加锁；否则方法仍正常执行，仅无互斥。
+     */
+    @GetMapping("/distributed-lock/{resourceKey}")
+    @Operation(summary = "Distributed lock sample (Redisson @DistributedLock on service method)")
+    public ApiResult<Map<String, String>> distributedLockSample(@PathVariable String resourceKey) {
+        String message = distributedLockService.runUnderLock(resourceKey);
+        return ApiResult.ok(Map.of("resourceKey", resourceKey, "message", message));
     }
 
     /** 使用 {@link Jsons} 做一次序列化与反序列化往返 */

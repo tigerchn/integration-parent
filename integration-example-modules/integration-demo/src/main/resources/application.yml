@@ -26,7 +26,7 @@ management:
 integration:
   redisson:
     # 为 true 且 Redis 可连时注册 RedissonClient；本地无 Redis 请保持 false
-    enabled: false
+    enabled: true
   openapi:
     title: Integration Demo API
     version: 1.0.0
