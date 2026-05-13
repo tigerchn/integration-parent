@@ -3,7 +3,9 @@ package com.integration.admin.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.integration.common.core.api.ApiResult;
 import com.integration.common.core.api.ResultCode;
+import com.integration.common.core.trace.TraceConstants;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -66,23 +68,29 @@ public class AdminSecurityConfiguration {
                         .jwtAuthenticationConverter(adminJwtAuthenticationConverter::convert)))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
-                                writeApiError(response, objectMapper, HttpStatus.UNAUTHORIZED, ResultCode.UNAUTHORIZED))
+                                writeApiError(response, objectMapper, HttpStatus.UNAUTHORIZED, ResultCode.UNAUTHORIZED,
+                                        AdminSecurityErrorHints.unauthorized(request.getRequestURI(), authException)))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                writeApiError(response, objectMapper, HttpStatus.FORBIDDEN, ResultCode.FORBIDDEN)));
+                                writeApiError(response, objectMapper, HttpStatus.FORBIDDEN, ResultCode.FORBIDDEN,
+                                        AdminSecurityErrorHints.forbidden(request.getRequestURI(), accessDeniedException))));
 
         http.addFilterAfter(new AdminTokenBlacklistFilter(blacklistService), BearerTokenAuthenticationFilter.class);
         return http.build();
     }
 
     /**
-     * 写入 JSON 格式的 {@link ApiResult} 错误体。
+     * 写入 JSON 格式的 {@link ApiResult} 错误体（含 traceId，与全局异常处理一致）。
      */
     private static void writeApiError(HttpServletResponse response, ObjectMapper objectMapper, HttpStatus httpStatus,
-                                       ResultCode resultCode) throws IOException {
+                                      ResultCode resultCode, String message) throws IOException {
         response.setStatus(httpStatus.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        ApiResult<Void> body = ApiResult.fail(resultCode, resultCode.getMessage());
+        ApiResult<Void> body = ApiResult.fail(resultCode, message);
+        String traceId = MDC.get(TraceConstants.TRACE_ID);
+        if (traceId != null) {
+            body.setTraceId(traceId);
+        }
         objectMapper.writeValue(response.getOutputStream(), body);
     }
 
