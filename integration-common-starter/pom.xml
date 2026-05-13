@@ -22,6 +22,7 @@
         <module>integration-common-security-starter</module>
         <module>integration-common-tracing-starter</module>
         <module>integration-common-redis-starter</module>
+        <module>integration-common-redisson-starter</module>
         <module>integration-common-mybatis-plus-starter</module>
         <module>integration-common-mq-starter</module>
         <module>integration-common-mail-starter</module>
