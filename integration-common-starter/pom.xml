@@ -26,6 +26,7 @@
         <module>integration-common-mybatis-plus-starter</module>
         <module>integration-common-mq-starter</module>
         <module>integration-common-mail-starter</module>
+        <module>integration-common-storage-starter</module>
         <module>integration-common-knife4j-starter</module>
         <module>integration-common-job-starter</module>
         <module>integration-common-websocket-starter</module>

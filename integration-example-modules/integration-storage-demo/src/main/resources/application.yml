@@ -1,0 +1,46 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: integration-storage-demo
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# 返回的 accessUrl 为固定公开对象地址（无 sign）；需桶/对象可读策略或 CDN
+integration:
+  storage:
+    enabled: true
+    type: cos
+    cos:
+      secret-id: "secret-id"
+      secret-key: "secret-key"
+      region: ap-shanghai
+      bucket: "bucket"
+    oss:
+      endpoint: ${OSS_ENDPOINT:https://oss-cn-hangzhou.aliyuncs.com}
+      access-key-id: ${OSS_ACCESS_KEY_ID:}
+      access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+      bucket: ${OSS_BUCKET:}
+  openapi:
+    title: Integration Storage Demo API
+    version: 1.0.0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+knife4j:
+  enable: true
+
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} [%X{traceId:-}] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"

@@ -2,6 +2,7 @@ package com.integration.common.tool.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.integration.common.tool.json.Jsons;
+import com.integration.common.tool.order.OrderNoUtil;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,5 +23,14 @@ public class ToolAutoConfiguration {
     @ConditionalOnMissingBean
     public Jsons jsons(ObjectMapper objectMapper) {
         return new Jsons(objectMapper);
+    }
+
+    /**
+     * @return 订单号生成器（单例；Snowflake + 混淆后缀）
+     */
+    @Bean
+    @ConditionalOnMissingBean(OrderNoUtil.class)
+    public OrderNoUtil orderNoUtil() {
+        return new OrderNoUtil();
     }
 }

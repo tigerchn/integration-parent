@@ -34,6 +34,8 @@
         <knife4j.version>4.5.0</knife4j.version>
         <hutool.version>5.8.34</hutool.version>
         <redisson.version>3.33.0</redisson.version>
+        <tencent-cos.version>5.6.227</tencent-cos.version>
+        <aliyun-oss.version>3.18.1</aliyun-oss.version>
     </properties>
 
     <dependencyManagement>
@@ -62,6 +64,16 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${tencent-cos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-oss.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.integration</groupId>
@@ -116,6 +128,11 @@
             <dependency>
                 <groupId>com.integration</groupId>
                 <artifactId>integration-common-mail-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.integration</groupId>
+                <artifactId>integration-common-storage-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -1,0 +1,2 @@
+com.integration.common.storage.autoconfigure.TencentCosStorageAutoConfiguration
+com.integration.common.storage.autoconfigure.AliyunOssStorageAutoConfiguration
