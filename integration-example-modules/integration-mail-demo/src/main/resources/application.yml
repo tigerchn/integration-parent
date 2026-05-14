@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: integration-mail-demo
+  mail:
+    # --- 阿里云企业邮等：465 = 全程 SSL（SMTPS），必须 mail.smtp.ssl.enable=true，且一般需 auth=true ---
+    host: smtp.mxhichina.com
+    port: 465
+    username: "账号"
+    password: "密码"
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.mxhichina.com
+      # 排障时可临时打开：mail.debug: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+integration:
+  mail:
+    enabled: true
+    # 若登录名不是完整邮箱，请显式指定发件地址
+    # from-address: noreply@yourdomain.cn
+    from-display-name: Integration Mail Demo
+  openapi:
+    title: Integration Mail Demo API
+    version: 1.0.0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+knife4j:
+  enable: true
+
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} [%X{traceId:-}] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"

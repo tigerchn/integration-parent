@@ -19,6 +19,7 @@
     <modules>
         <module>integration-demo</module>
         <module>integration-lock-demo</module>
+        <module>integration-mail-demo</module>
         <module>integration-security-sample</module>
     </modules>
 </project>
