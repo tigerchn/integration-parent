@@ -166,6 +166,11 @@
                 <artifactId>integration-common-test-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.integration</groupId>
+                <artifactId>integration-common-encrypt-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

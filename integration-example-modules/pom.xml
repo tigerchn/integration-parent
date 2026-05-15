@@ -24,5 +24,6 @@
         <module>integration-tool-demo</module>
         <module>integration-excel-demo</module>
         <module>integration-security-sample</module>
+        <module>integration-encrypt-demo</module>
     </modules>
 </project>

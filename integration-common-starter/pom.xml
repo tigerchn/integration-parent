@@ -32,5 +32,6 @@
         <module>integration-common-job-starter</module>
         <module>integration-common-websocket-starter</module>
         <module>integration-common-test-starter</module>
+        <module>integration-common-encrypt-starter</module>
     </modules>
 </project>
