@@ -1,7 +1,7 @@
 package com.integration.common.tool.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.integration.common.tool.json.Jsons;
+import com.integration.common.tool.json.JsonUtil;
 import com.integration.common.tool.order.OrderNoUtil;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 
 /**
- * 工具类 Bean 自动配置（如 {@link Jsons}）。
+ * 工具类 Bean 自动配置（如 {@link JsonUtil}）。
  */
 @AutoConfiguration
 @ConditionalOnClass(ObjectMapper.class)
@@ -23,8 +23,8 @@ public class ToolAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public Jsons jsons(ObjectMapper objectMapper) {
-        return new Jsons(objectMapper);
+    public JsonUtil jsons(ObjectMapper objectMapper) {
+        return new JsonUtil(objectMapper);
     }
 
     /**

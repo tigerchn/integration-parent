@@ -1,6 +1,6 @@
 package com.integration.demo.web;
 
-import com.integration.common.tool.json.Jsons;
+import com.integration.common.tool.json.JsonUtil;
 import com.integration.common.core.api.ApiResult;
 import com.integration.common.core.api.ResultCode;
 import com.integration.common.core.exception.BizException;
@@ -25,15 +25,15 @@ import java.util.Map;
 @Tag(name = "Demo")
 public class DemoController {
 
-    private final Jsons jsons;
+    private final JsonUtil jsonUtil;
     private final DemoDistributedLockService distributedLockService;
 
     /**
-     * @param jsons                 JSON 序列化工具
+     * @param jsonUtil                 JSON 序列化工具
      * @param distributedLockService 演示 Redisson {@code @DistributedLock} 的入口（见 {@link #distributedLockSample}）
      */
-    public DemoController(Jsons jsons, DemoDistributedLockService distributedLockService) {
-        this.jsons = jsons;
+    public DemoController(JsonUtil jsonUtil, DemoDistributedLockService distributedLockService) {
+        this.jsonUtil = jsonUtil;
         this.distributedLockService = distributedLockService;
     }
 
@@ -77,12 +77,12 @@ public class DemoController {
         return ApiResult.ok(Map.of("resourceKey", resourceKey, "message", message));
     }
 
-    /** 使用 {@link Jsons} 做一次序列化与反序列化往返 */
+    /** 使用 {@link JsonUtil} 做一次序列化与反序列化往返 */
     @GetMapping("/json-roundtrip")
     @Operation(summary = "Uses Jsons helper from tool starter")
     public ApiResult<Map<String, Object>> jsonRoundtrip() {
-        String json = jsons.write(Map.of("k", "v"));
-        Map<?, ?> parsed = jsons.read(json, Map.class);
+        String json = jsonUtil.write(Map.of("k", "v"));
+        Map<?, ?> parsed = jsonUtil.read(json, Map.class);
         return ApiResult.ok(Map.of("original", json, "parsed", parsed));
     }
 

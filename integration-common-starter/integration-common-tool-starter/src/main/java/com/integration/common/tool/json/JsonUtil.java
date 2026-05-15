@@ -9,14 +9,14 @@ import java.io.UncheckedIOException;
 /**
  * 基于 Spring 容器中的 {@link ObjectMapper} 提供 JSON 读写封装。
  */
-public final class Jsons {
+public final class JsonUtil {
 
     private final ObjectMapper mapper;
 
     /**
      * @param mapper 用于序列化/反序列化的 {@link ObjectMapper}
      */
-    public Jsons(ObjectMapper mapper) {
+    public JsonUtil(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -51,7 +51,9 @@ public final class Jsons {
         }
     }
 
-    /** @return 底层 {@link ObjectMapper} */
+    /**
+     * @return 底层 {@link ObjectMapper}
+     */
     public ObjectMapper mapper() {
         return mapper;
     }
