@@ -36,8 +36,7 @@ public class IntegrationEncryptAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnProperty(prefix = "integration.encrypt", name = "decrypt-request-body-enabled", havingValue = "true",
-            matchIfMissing = false)
+    @ConditionalOnProperty(prefix = "integration.encrypt", name = "decrypt-request-body-enabled", havingValue = "true", matchIfMissing = false)
     static class DecryptFilterAutoConfiguration {
 
         @Bean
@@ -53,8 +52,7 @@ public class IntegrationEncryptAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnProperty(prefix = "integration.encrypt", name = "encrypt-response-body-enabled", havingValue = "true",
-            matchIfMissing = false)
+    @ConditionalOnProperty(prefix = "integration.encrypt", name = "encrypt-response-body-enabled", havingValue = "true", matchIfMissing = false)
     static class EncryptAdviceAutoConfiguration {
 
         @Bean
