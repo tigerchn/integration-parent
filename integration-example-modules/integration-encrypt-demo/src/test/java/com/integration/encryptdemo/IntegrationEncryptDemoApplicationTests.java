@@ -1,6 +1,5 @@
 package com.integration.encryptdemo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.assistant.RsaKeyPairAssistant;
 import com.integration.common.encrypt.config.EncryptProperties;
@@ -21,9 +20,6 @@ class IntegrationEncryptDemoApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     private EncryptProperties encryptProperties;

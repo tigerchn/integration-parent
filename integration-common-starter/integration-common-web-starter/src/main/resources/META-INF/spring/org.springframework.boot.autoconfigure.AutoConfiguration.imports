@@ -1,1 +1,2 @@
+com.integration.common.web.autoconfigure.JacksonDefaultsAutoConfiguration
 com.integration.common.web.autoconfigure.WebAutoConfiguration

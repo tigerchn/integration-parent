@@ -6,6 +6,7 @@ import com.integration.common.encrypt.config.EncryptProperties;
 import com.integration.common.encrypt.core.DecryptOncePerRequestFilter;
 import com.integration.common.encrypt.core.EncryptResponseBodyAdvice;
 import jakarta.servlet.DispatcherType;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,6 +23,7 @@ import java.util.EnumSet;
  */
 @Configuration
 @EnableConfigurationProperties(EncryptProperties.class)
+@ConditionalOnBean(ObjectMapper.class)
 @ConditionalOnProperty(prefix = "integration.encrypt", name = "enable", havingValue = "true", matchIfMissing = false)
 public class IntegrationEncryptAutoConfiguration {
 
