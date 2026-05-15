@@ -14,7 +14,7 @@
     <artifactId>integration-encrypt-demo</artifactId>
     <packaging>jar</packaging>
     <name>integration-encrypt-demo</name>
-    <description>Runnable demo for integration-common-encrypt-starter (@ApiDecrypt / @ApiEncrypt)</description>
+    <description>Runnable demo for integration-common-encrypt-starter (path-based request decrypt / response encrypt)</description>
 
     <dependencies>
         <dependency>

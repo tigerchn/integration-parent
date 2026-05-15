@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class AesGcmUtil {
+public class AesUtil {
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 16;
 
-    private AesGcmUtil() {
+    private AesUtil() {
     }
 
     public static String generateKey(int keySize) {

@@ -1,16 +1,17 @@
 package com.integration.encryptdemo;
 
-import com.integration.encryptdemo.dto.EchoRequest;
-import com.integration.encryptdemo.util.EncryptEchoRequestUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.integration.common.encrypt.assistant.PayloadAssistant;
+import com.integration.common.encrypt.assistant.RsaKeyPairAssistant;
+import com.integration.common.encrypt.config.EncryptProperties;
+import com.integration.encryptdemo.dto.CryptModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,6 +22,12 @@ class IntegrationEncryptDemoApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private EncryptProperties encryptProperties;
+
     @Test
     void contextLoadsAndPingIsOpen() throws Exception {
         mockMvc.perform(get("/api/encrypt-demo/ping"))
@@ -28,14 +35,37 @@ class IntegrationEncryptDemoApplicationTests {
                 .andExpect(jsonPath("$.status").value("ok"));
     }
 
+
+    @Autowired
+    PayloadAssistant payloadAssistant;
+
     @Test
-    void echoWithUtilGeneratedBody() throws Exception {
-        String body = EncryptEchoRequestUtil.toEncryptedJson(new EchoRequest("hello-from-util"));
-        System.out.println("body = " + body);
-        mockMvc.perform(post("/api/encrypt-demo/echo")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.echo").value("hello-from-util"));
+    void encryptDecrypt() {
+        /*CryptModel cryptModel = new CryptModel("刘小敏", "12345678");
+        String encrypt = payloadAssistant.encrypt(cryptModel);
+        System.out.println("encrypt = " + encrypt);
+
+
+
+        CryptModel decrypt = payloadAssistant.decrypt(encrypt, CryptModel.class);
+        System.out.println("name = " + decrypt.getName());
+        System.out.println("value = " + decrypt.getValue());
+        */
+
+        String text = "{\n" +
+                "    \"key\": \"WXxYnvoWwbmFGJ9CfaaClDYJ2fnGgFiP8oa24DbjYTgvF79674FQ/XiKQF7ROJNNZ62I78d6wHhApF3+Y0gDBm6jnFTINTzqCpVlG/2B/iGnpA5GC6XG9IHJ5wPzsFVQUtFuQph7GXdFd25pn4iyRW6QxH0XO7I6j60T25Jfwtc5vYDImVIXHC1hSZ5kk7crsKoWZ1cvmXNgZZvOVIHu3KTMjZSIuaweBZ0Ph5i2CfiRgweMoK8MIQj47Q1bIKhxjlwCV3Srhj4Lx6mrchdmdVOvnGLcd+FZjlWEFxBkIo9ZOpwYx6fZaPi6QVtSTBVfltdcYoLOeTF/UFrV01XyvA==\",\n" +
+                "    \"data\": \"6/jIhjEIGfIZAXmnQwqYbrbRTQa58B1N7+qJwXM+P3xrGLU5p2xbUBEjSrclgu5JQK1flSeptyKkVtACOyN/5lcNpCKeuf4=\"\n" +
+                "}";
+        CryptModel decrypt = payloadAssistant.decrypt(text, CryptModel.class);
+        System.out.println("name = " + decrypt.getName());
+        System.out.println("value = " + decrypt.getValue());
+    }
+
+    @Test
+    void keyPair() {
+        RsaKeyPairAssistant.KeyPairBase64 keyPairBase64 = RsaKeyPairAssistant.generateKeyPairBase64();
+        System.out.println("keyPairBase64.rsaPrivateKey() = \n" + keyPairBase64.rsaPrivateKey());
+        System.out.println("keyPairBase64.rsaPublicKey() = \n" + keyPairBase64.rsaPublicKey());
+
     }
 }

@@ -1,6 +1,7 @@
 package com.integration.common.encrypt.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.config.EncryptProperties;
 import com.integration.common.encrypt.core.DecryptOncePerRequestFilter;
 import com.integration.common.encrypt.core.EncryptResponseBodyAdvice;
@@ -12,52 +13,74 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.EnumSet;
-import java.util.List;
 
+/**
+ * 装配策略：{@code decrypt-request-body-enabled=true} 才注册请求解密过滤器；
+ * {@code encrypt-response-body-enabled=true} 才注册响应加密 {@code ControllerAdvice}；二者可独立开关。
+ */
 @Configuration
 @EnableConfigurationProperties(EncryptProperties.class)
 @ConditionalOnProperty(prefix = "integration.encrypt", name = "enable", havingValue = "true", matchIfMissing = false)
 public class IntegrationEncryptAutoConfiguration {
 
-    /**
-     * 启动时校验必要配置，避免运行期才暴露缺密钥问题。
-     */
     @Bean
     static EncryptStartupValidator encryptStartupValidator(EncryptProperties properties) {
         return new EncryptStartupValidator(properties);
     }
 
     @Bean
-    public FilterRegistrationBean<DecryptOncePerRequestFilter> decryptRequestFilterRegistration(
-            EncryptProperties properties,
-            ObjectMapper objectMapper,
-            List<HandlerMapping> handlerMappings) {
-        DecryptOncePerRequestFilter filter = new DecryptOncePerRequestFilter(properties, objectMapper, handlerMappings);
-        FilterRegistrationBean<DecryptOncePerRequestFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 20);
-        registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
-        return registration;
+    PayloadAssistant payloadAssistant(EncryptProperties properties, ObjectMapper objectMapper) {
+        return new PayloadAssistant(properties, objectMapper);
     }
 
-    @Bean
-    public EncryptResponseBodyAdvice encryptResponseBodyAdvice(EncryptProperties properties, ObjectMapper objectMapper) {
-        return new EncryptResponseBodyAdvice(properties, objectMapper);
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnProperty(prefix = "integration.encrypt", name = "decrypt-request-body-enabled", havingValue = "true",
+            matchIfMissing = false)
+    static class DecryptFilterAutoConfiguration {
+
+        @Bean
+        FilterRegistrationBean<DecryptOncePerRequestFilter> decryptRequestFilterRegistration(
+                EncryptProperties properties,
+                ObjectMapper objectMapper) {
+            DecryptOncePerRequestFilter filter = new DecryptOncePerRequestFilter(properties, objectMapper);
+            FilterRegistrationBean<DecryptOncePerRequestFilter> registration = new FilterRegistrationBean<>(filter);
+            registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 20);
+            registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+            return registration;
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnProperty(prefix = "integration.encrypt", name = "encrypt-response-body-enabled", havingValue = "true",
+            matchIfMissing = false)
+    static class EncryptAdviceAutoConfiguration {
+
+        @Bean
+        EncryptResponseBodyAdvice encryptResponseBodyAdvice(EncryptProperties properties, ObjectMapper objectMapper) {
+            return new EncryptResponseBodyAdvice(properties, objectMapper);
+        }
     }
 
     static final class EncryptStartupValidator {
 
         private EncryptStartupValidator(EncryptProperties properties) {
-            if (!StringUtils.hasText(properties.getRsaPublicKey()) || !StringUtils.hasText(properties.getRsaPrivateKey())) {
-                throw new IllegalStateException(
-                        "integration.encrypt 已启用：请同时配置 integration.encrypt.rsa-public-key 与 integration.encrypt.rsa-private-key（Base64 DER）。");
-            }
             int bits = properties.getAesKeySize();
             if (bits != 128 && bits != 192 && bits != 256) {
                 throw new IllegalStateException(
                         "integration.encrypt.aes-key-size 必须为 128、192 或 256，当前值: " + bits);
+            }
+            if (!properties.isDecryptRequestBodyEnabled() && !properties.isEncryptResponseBodyEnabled()) {
+                return;
+            }
+            if (properties.isDecryptRequestBodyEnabled() && !StringUtils.hasText(properties.getRsaPrivateKey())) {
+                throw new IllegalStateException(
+                        "integration.encrypt.decrypt-request-body-enabled=true 时需配置 integration.encrypt.rsa-private-key。");
+            }
+            if (properties.isEncryptResponseBodyEnabled() && !StringUtils.hasText(properties.getRsaPublicKey())) {
+                throw new IllegalStateException(
+                        "integration.encrypt.encrypt-response-body-enabled=true 时需配置 integration.encrypt.rsa-public-key。");
             }
         }
     }
