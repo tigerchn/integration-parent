@@ -1,9 +1,10 @@
 package com.integration.common.core.api;
 
-import java.time.Instant;
-
 /**
  * 统一 API 响应体，包含成功标识、业务码、消息、载荷、链路 ID 与时间戳。
+ * <p>
+ * {@link #timestamp} 为自 1970-01-01T00:00:00Z 起的 UTC 毫秒值，与平台 Jackson 默认时区（如
+ * {@code Asia/Shanghai}）无关，便于各端统一解析；需要展示时再按业务时区格式化即可。
  *
  * @param <T> 业务数据类型
  */
@@ -14,7 +15,7 @@ public final class ApiResult<T> {
     private String message;
     private T data;
     private String traceId;
-    private Instant timestamp;
+    private long timestamp;
 
     public boolean isSuccess() {
         return success;
@@ -56,11 +57,11 @@ public final class ApiResult<T> {
         this.traceId = traceId;
     }
 
-    public Instant getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -77,7 +78,7 @@ public final class ApiResult<T> {
         r.setCode(ResultCode.SUCCESS.getCode());
         r.setMessage(ResultCode.SUCCESS.getMessage());
         r.setData(data);
-        r.setTimestamp(Instant.now());
+        r.setTimestamp(nowMillis());
         return r;
     }
 
@@ -103,7 +104,7 @@ public final class ApiResult<T> {
         r.setSuccess(false);
         r.setCode(code.getCode());
         r.setMessage(message != null ? message : code.getMessage());
-        r.setTimestamp(Instant.now());
+        r.setTimestamp(nowMillis());
         return r;
     }
 
@@ -120,7 +121,11 @@ public final class ApiResult<T> {
         r.setSuccess(false);
         r.setCode(code);
         r.setMessage(message);
-        r.setTimestamp(Instant.now());
+        r.setTimestamp(nowMillis());
         return r;
+    }
+
+    private static long nowMillis() {
+        return System.currentTimeMillis();
     }
 }

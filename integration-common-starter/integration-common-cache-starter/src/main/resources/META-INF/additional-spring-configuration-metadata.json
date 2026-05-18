@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "integration.cache.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable @EnableCaching and default spring.cache.* hints for Caffeine.",
+      "defaultValue": true
+    },
+    {
+      "name": "integration.cache.prefer-caffeine",
+      "type": "java.lang.Boolean",
+      "description": "When spring.cache.type is unset, default it to caffeine.",
+      "defaultValue": true
+    }
+  ]
+}

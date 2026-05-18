@@ -19,6 +19,7 @@
         <module>integration-common-tool-starter</module>
         <module>integration-common-excel-starter</module>
         <module>integration-common-log-starter</module>
+        <module>integration-common-cache-starter</module>
         <module>integration-common-web-starter</module>
         <module>integration-common-security-starter</module>
         <module>integration-common-tracing-starter</module>
