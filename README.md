@@ -83,7 +83,7 @@ integration:
 ## Demo 说明
 
 - HTTP：`http://localhost:8080/api/demo/ping`  
-- Knife4j（若引入 knife4j starter）：一般访问 `http://localhost:8080/doc.html`（以实际 starter 与 springdoc 配置为准）。  
+- Knife4j（若引入 `integration-common-knife4j-starter`）：默认 `http://localhost:{port}/doc.html`；`springdoc` / `knife4j` 平台默认项由 starter 提供，业务只需配置 `integration.openapi.title` / `version`。  
 - 日志：`application.yml` 中 `logging.pattern.console` 已包含 MDC 占位符 `%X{traceId:-}`，与 `integration-common-log-starter` 中过滤器写入的 `traceId` 对齐；请求头可传 `X-Trace-Id` 透传链路 ID。
 - 安全：`integration-common-security-starter` 仅在 **`integration.security.enabled=true`** 时才会注册 `SecurityFilterChain`；关闭或未配置时 **本 starter 不声明任何安全相关 Bean**，由业务工程自行编写 Spring Security 配置（或不引入该 starter）。若已引入 `spring-boot-starter-security` 却未定义任何 `SecurityFilterChain`，仍将受到 **Spring Boot 默认安全策略** 影响，需在业务侧处理。
 - 链路：引入 `integration-common-tracing-starter` 后仍会做追踪上下文；默认 **不会** 连 Zipkin（Demo 已排除 `ZipkinAutoConfiguration`）。若要上报，本地启动 Zipkin 或 OTLP 收集端后删除该 `exclude`，并配置 `management.zipkin.tracing.endpoint`（或改用 Boot 3.4+ 的导出开关）。
@@ -102,7 +102,7 @@ integration:
 | `integration-common-mybatis-plus-starter` | 分页插件（含 `mybatis-plus-jsqlparser`） |
 | `integration-common-mq-starter` | `Jackson2JsonMessageConverter` |
 | `integration-common-mail-starter` | 邮件扩展配置占位 |
-| `integration-common-knife4j-starter` | 默认 `OpenAPI` bean |
+| `integration-common-knife4j-starter` | Knife4j + springdoc 平台默认；默认 `OpenAPI` bean |
 | `integration-common-job-starter` | `@EnableScheduling` |
 | `integration-common-websocket-starter` | `ServerEndpointExporter` |
 | `integration-common-test-starter` | 聚合 `spring-boot-starter-test`（请 **`scope=test`** 引用） |
@@ -111,7 +111,7 @@ integration:
 
 - `integration.security.*`：是否启用安全、匿名路径、JWT issuer（`oauth2.resource-server.jwt.issuer-uri`）；启用后链路为无 Session、关闭匿名身份，并对未认证请求返回 **401**（便于 REST / JWT 场景）
 - `integration.mybatis-plus.*`：分页开关、`DbType`、`overflow`  
-- `integration.openapi.*`：`title`、`version`  
+- `integration.openapi.*`：`enabled`（默认 `true`）、`title`、`version`；`enabled: false` 时关闭 api-docs 与 UI（生产可显式关闭）  
 - `integration.mail.*`：如 `fromDisplayName`  
 - `management.tracing.*`、`management.zipkin.tracing.*`：采样与导出  
 

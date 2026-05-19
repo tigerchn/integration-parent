@@ -1,0 +1,7 @@
+# 平台默认（引入 integration-common-knife4j-starter 即生效；业务 yml 可覆盖）
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+knife4j:
+  enable: true

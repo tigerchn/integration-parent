@@ -5,15 +5,17 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
- * 默认 OpenAPI 文档 Bean 自动配置（标题与版本来自配置）。
+ * 默认 OpenAPI 文档 Bean 自动配置（标题与版本来自 {@code integration.openapi.*}）。
  */
 @AutoConfiguration
 @ConditionalOnClass(OpenAPI.class)
 @EnableConfigurationProperties(Knife4jIntegrationProperties.class)
+@ConditionalOnProperty(prefix = "integration.openapi", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class IntegrationKnife4jAutoConfiguration {
 
     /**
