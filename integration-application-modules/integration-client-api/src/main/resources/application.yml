@@ -4,9 +4,25 @@ server:
 spring:
   application:
     name: integration-client-api
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/integration_client?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    username: root
+    password: "123456"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
   autoconfigure:
     exclude:
       - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
 
 management:
   endpoints:
@@ -18,9 +34,22 @@ management:
       probability: 1.0
 
 integration:
+  security:
+    enabled: false
   openapi:
     title: Integration Client API
     version: 1.0.0
+  client:
+    wechat:
+      mini-program:
+        app-id: ${WX_MINI_APP_ID:}
+        app-secret: ${WX_MINI_APP_SECRET:}
+        mock-enabled: false
+    security:
+      redis-token-blacklist-enabled: true
+      jwt:
+        secret: "integration-client-jwt-secret-change-me-32b!!"
+        expires-in-seconds: 604800
 
 logging:
   pattern:
