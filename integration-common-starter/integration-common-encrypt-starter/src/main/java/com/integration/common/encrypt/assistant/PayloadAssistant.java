@@ -20,25 +20,31 @@ public class PayloadAssistant {
     }
 
     public <T> String encrypt(T body) {
+        return writeValueAsString(encryptBody(body));
+    }
+
+    public EncryptedBody encryptBody(Object body) {
         String aesKey = AesUtil.generateKey(properties.getAesKeySize());
         String plainJson = body instanceof String s ? s : writeValueAsString(body);
         String data = AesUtil.encrypt(plainJson, aesKey);
         String key = RsaUtil.encrypt(aesKey, properties.getRsaPublicKey(), properties.getRsaTransformation());
-        EncryptedBody encryptedBody = new EncryptedBody(key, data);
-        return writeValueAsString(encryptedBody);
+        return new EncryptedBody(key, data);
     }
 
     public <T> T decrypt(String body, Class<T> clazz) {
-        EncryptedBody encrypted = readValue(body, EncryptedBody.class);
+        String realBody = decryptEnvelopeToPlainJson(body);
+        return readValue(realBody, clazz);
+    }
+
+    public String decryptEnvelopeToPlainJson(String envelopeJson) {
+        EncryptedBody encrypted = readValue(envelopeJson, EncryptedBody.class);
         if (encrypted == null || !StringUtils.hasText(encrypted.key()) || !StringUtils.hasText(encrypted.data())) {
             throw new EncryptException("入参解密失败：请求体须为 JSON 对象且包含非空的 key、data 字段");
         }
 
         String aesKey = RsaUtil.decrypt(encrypted.key(), properties.getRsaPrivateKey(), properties.getRsaTransformation());
-        String realBody = AesUtil.decrypt(encrypted.data(), aesKey);
-        return readValue(realBody, clazz);
+        return AesUtil.decrypt(encrypted.data(), aesKey);
     }
-
 
     private <T> T readValue(String body, Class<T> tClass) {
         if (tClass == null) {

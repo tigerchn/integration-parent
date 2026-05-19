@@ -93,12 +93,12 @@ integration:
 | 组件 | 作用 |
 |------|------|
 | `integration-common-core` | 统一返回体、错误码、业务异常、Trace 常量、断言（供其他模块与纯 Java 层使用） |
-| `integration-common-tool-starter` | `Jsons`（基于 `ObjectMapper`），依赖 core |
+| `integration-common-tool-starter` | `JsonUtil`（基于 `ObjectMapper`），依赖 core |
 | `integration-common-log-starter` | Servlet 环境下 Trace 过滤器 + MDC，依赖 core |
 | `integration-common-web-starter` | `GlobalExceptionHandler`（依赖 core + log-starter） |
 | `integration-common-security-starter` | 仅当 `integration.security.enabled=true` 时注册 `SecurityFilterChain`（JWT Resource Server 可选 + 匿名路径）；否则不参与装配，完全交给业务 |
 | `integration-common-tracing-starter` | Brave + Zipkin reporter；行为由 `management.tracing.*` 等 Boot 原生项控制 |
-| `integration-common-redis-starter` | `integrationRedisTemplate`（JSON 序列化） |
+| `integration-common-redis-starter` | 聚合 `spring-boot-starter-data-redis` 与连接池依赖 |
 | `integration-common-mybatis-plus-starter` | 分页插件（含 `mybatis-plus-jsqlparser`） |
 | `integration-common-mq-starter` | `Jackson2JsonMessageConverter` |
 | `integration-common-mail-starter` | 邮件扩展配置占位 |

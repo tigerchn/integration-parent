@@ -1,12 +1,9 @@
 package com.integration.common.encrypt.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.config.EncryptPathSupport;
 import com.integration.common.encrypt.config.EncryptProperties;
-import com.integration.common.encrypt.dto.EncryptedBody;
 import com.integration.common.encrypt.exception.EncryptException;
-import com.integration.common.encrypt.util.AesUtil;
-import com.integration.common.encrypt.util.RsaUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -27,11 +24,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     private final EncryptProperties properties;
-    private final ObjectMapper objectMapper;
+    private final PayloadAssistant payloadAssistant;
 
-    public EncryptResponseBodyAdvice(EncryptProperties properties, ObjectMapper objectMapper) {
+    public EncryptResponseBodyAdvice(EncryptProperties properties, PayloadAssistant payloadAssistant) {
         this.properties = properties;
-        this.objectMapper = objectMapper;
+        this.payloadAssistant = payloadAssistant;
     }
 
     @Override
@@ -56,12 +53,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         }
 
         try {
-            String aesKey = AesUtil.generateKey(properties.getAesKeySize());
-            String plainJson = body instanceof String s ? s : objectMapper.writeValueAsString(body);
-            String data = AesUtil.encrypt(plainJson, aesKey);
-            String key = RsaUtil.encrypt(aesKey, properties.getRsaPublicKey(), properties.getRsaTransformation());
-            return new EncryptedBody(key, data);
-
+            return payloadAssistant.encryptBody(body);
         } catch (EncryptException e) {
             throw e;
         } catch (Exception e) {

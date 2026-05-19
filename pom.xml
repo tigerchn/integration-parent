@@ -32,7 +32,6 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <hutool.version>5.8.34</hutool.version>
         <redisson.version>3.33.0</redisson.version>
         <tencent-cos.version>5.6.227</tencent-cos.version>
         <aliyun-oss.version>3.18.1</aliyun-oss.version>
@@ -55,11 +54,6 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.redisson</groupId>

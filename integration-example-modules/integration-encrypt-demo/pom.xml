@@ -29,6 +29,10 @@
             <groupId>com.integration</groupId>
             <artifactId>integration-common-encrypt-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.integration</groupId>
+            <artifactId>integration-common-knife4j-starter</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.integration</groupId>

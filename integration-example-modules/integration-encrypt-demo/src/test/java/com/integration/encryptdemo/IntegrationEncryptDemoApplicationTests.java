@@ -2,7 +2,6 @@ package com.integration.encryptdemo;
 
 import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.assistant.RsaKeyPairAssistant;
-import com.integration.common.encrypt.config.EncryptProperties;
 import com.integration.encryptdemo.dto.CryptModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ class IntegrationEncryptDemoApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private EncryptProperties encryptProperties;
 
     @Test
     void contextLoadsAndPingIsOpen() throws Exception {

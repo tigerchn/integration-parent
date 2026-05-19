@@ -39,10 +39,6 @@
         </dependency>
         <dependency>
             <groupId>com.integration</groupId>
-            <artifactId>integration-common-job-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.integration</groupId>
             <artifactId>integration-common-security-starter</artifactId>
         </dependency>
         <dependency>
@@ -52,10 +48,6 @@
         <dependency>
             <groupId>com.integration</groupId>
             <artifactId>integration-common-redis-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.integration</groupId>
-            <artifactId>integration-common-redisson-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>

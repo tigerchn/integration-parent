@@ -11,9 +11,12 @@ management:
       exposure:
         include: health,info
 
-# 演示用 RSA 2048 密钥对（勿用于生产）；算法与 starter 默认 OAEP 一致
-# 全局请求解密 / 全局响应加密；exclude-paths 排除 Actuator 与明文 ping（对请求解密与响应加密同时生效）
 integration:
+  openapi:
+    title: Integration Encrypt Demo API
+    version: 1.0.0
+  # 演示用 RSA 2048 密钥对（勿用于生产）；算法与 starter 默认 OAEP 一致
+  # 全局请求解密 / 全局响应加密；exclude-paths 对请求解密与响应加密同时生效
   encrypt:
     enable: true
     decrypt-request-body-enabled: true
@@ -21,7 +24,21 @@ integration:
     exclude-paths:
       - "/actuator"
       - "/api/encrypt-demo/ping"
+      - "/doc.html"
+      - "/swagger-ui"
+      - "/swagger-ui/**"
+      - "/swagger-ui.html"
+      - "/v3/api-docs"
+      - "/v3/api-docs/**"
+      - "/webjars/**"
     #rsa-public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtKkCzegaCV89aeLLIqoF1Q+RfpKnR1w7gguj4E8No4X+eGvBEyHdWp9fAH6Lbf6HyKWKiW+6rYlCV42xdc5CInyJ6Yz68i0d46yNyrrG5AVZm8d3/rPyA0DTBfwdP1mE/DQSIbVU4oXybbPdCh3uF69go9Q0oXgE1THur0VUSVMlQJbJ5/Qll+aJw1VNe7tW5pIksEfsZTHfPe8m9VX8u4yqfJdRWp9+XW3S4h+aUFwQ+sCjKQUyWSQelh4trVO3VhGyACPfOoCu9PfPRhaL05oQ9IYibCyPZsddMqsrohDKBRkaQ5v32HwX5d9gmAud3R2dJF65Jm1PaS/SFHq93wIDAQAB"
     #rsa-private-key: "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC0qQLN6BoJXz1p4ssiqgXVD5F+kqdHXDuCC6PgTw2jhf54a8ETId1an18Afott/ofIpYqJb7qtiUJXjbF1zkIifInpjPryLR3jrI3KusbkBVmbx3f+s/IDQNMF/B0/WYT8NBIhtVTihfJts90KHe4Xr2Cj1DSheATVMe6vRVRJUyVAlsnn9CWX5onDVU17u1bmkiSwR+xlMd897yb1Vfy7jKp8l1Fan35dbdLiH5pQXBD6wKMpBTJZJB6WHi2tU7dWEbIAI986gK70989GFovTmhD0hiJsLI9mx10yqyuiEMoFGRpDm/fYfBfl32CYC53dHZ0kXrkmbU9pL9IUer3fAgMBAAECggEAFHtMzBdSTFm11rlVmlp4Ss13C0iJGngEbxvuulF8FFvum6xruUWPmOSUmrO+DvxaXI8YA7jdCyuSj+aKhfaaXNqNsCLBmI8w4kz/zkoanmNU42pb2k6AU4oX4ofQsQvvHcCxhYzPUNcqwvEvUCRQh/LkG+7FAMFgmuMMUmajxaQsw0e0hh1wEg0ASwmUmPFMmVUnz2Tttq5+oPi5z5W5nhv8ioT8HHqAwtBgXOFGYuK23fe6R8ByVZO1jzV0C8pe0DmoqPdePHwMN/oSfGxkYPo/aBqwhAFZOovzvexIFR2uRiGniEdnp0jZ8CrUHCFmTiH0drCb42zSHydJoKVqsQKBgQDY0YOUWFVtE65Ud1NycUZkW2tMV3Dc1YDwz43cPTuvLHIn5aocEKGBt6N0RCIh9OKyOwUb9QjHYFvPrL4u9kXNBZMfsXiPWqqQNHoT41MYUs7RXwy9nyEYYEtzVqu4Po3p2KtlWbpvXaHjgEu/sj+80+hPbTLKJg6CtEoj1SgA0wKBgQDVTr19/c7h4Ueh1BvHPuaYdOb+x58jAd4XUCafZgwQ7I8VR/jmrnEGCvrXcRLJ30K7r0++n9+t84s3CYVeqeDT1E16KtXJtkYkrWSiAoj87lbHDGjD32ElcJCB8pl2yTr0cIOQDJRJnEGYoB+kyt6bhaaAetasFr3Xhr96SqhHRQKBgFBG2ontXsvBErXRbIMd76susf6VDYOmRVRj9KlLvrJwKWAeR6qWecX2gT2GEIE0E09cTNr6EaMISVYOJmhq5JMxcjS01+dz8VztIRoF+/kwh8S7hZMbvPwygx0URQY1mwOvJl6jJ0UejNcX5HP4gmLers/hpYF1L8AzEpRL0sDjAoGAKrjYjxF0jB0Ywbq/zYo1mTdgxIqqvtIy7yxob+h6ZjFa/wIpQdqSXIl6cAf/oVsL/JdCO4W9wRNUQLOxeKJBm2ucEOnfY8UUC2iHDUPAuBfsXXWIziJBTMRczQoP3pCzNB4M258JXCzlnnIDpHfVWgTMslLoCBON9krQsuedCJkCgYACNBKrk9r2u58YC/PhxXUrF9gzgGp4UtO5qDdgAEpuNaw++mexqbxiSrWaNNP88Plrb4LC61RSXnynpPUozC77lRxGn7L9ZdIG9rMbluUz8lgIcrG60dFXTU8fPLKwoFsmwEfj1CzDH872nHEC241je2K+35kYOpNL2OwE4rUGUg=="
     rsa-public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAovmFy/msDV3bXv7nQwhtLZpb/9ypjbbjwi+5dMFqVCf9uGLCuy4MGUZ+Vk8S5JSrrs6E/iViyiwlgdIFhtos4D5XHs4tGjo0E52nZ28XnRDrE5UNKHJwRE2aTsT6GN3/jiabQ3zsS+bisIrNp0JG0hZd5XgE8wW+ZudXkb2qC0kLMfDEBrKaxNmkqZiDArmb8Fq2wy6d5f3g69yll1USQUypfu/U0WBOEgPYPADukhB2IjJbR1cPKTsTOjF/m5bhbnVcDxW1PDuFkWl4Vh7TheIF7OnORzen59YRg7nHQfeZZolOV/PK08D3HDoEJQ5mMyIkdraxAF1T1wD/GbY1rQIDAQAB"
     rsa-private-key: "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCi+YXL+awNXdte/udDCG0tmlv/3KmNtuPCL7l0wWpUJ/24YsK7LgwZRn5WTxLklKuuzoT+JWLKLCWB0gWG2izgPlcezi0aOjQTnadnbxedEOsTlQ0ocnBETZpOxPoY3f+OJptDfOxL5uKwis2nQkbSFl3leATzBb5m51eRvaoLSQsx8MQGsprE2aSpmIMCuZvwWrbDLp3l/eDr3KWXVRJBTKl+79TRYE4SA9g8AO6SEHYiMltHVw8pOxM6MX+bluFudVwPFbU8O4WRaXhWHtOF4gXs6c5HN6fn1hGDucdB95lmiU5X88rTwPccOgQlDmYzIiR2trEAXVPXAP8ZtjWtAgMBAAECggEARhghtqAUos8aWdoyZv9JzdJU/U/P0Pa3ML7L+e5yJ+3nTxWTAWSFqZ1LGx35VzymNpH2W0SDH8cq/pHw9JYDtRK677Hnbh9YZJNq+66pLlGneY2i0iGeLZJe6sAHfQiGMIJkRvuEugR8vUeFuglkYlliWx5qqodu491eKX20lBNPYO1+RzAXF7m2O/0cM3s4kOGbJWVEVFvS4XnMdsRSMeWJUVFMS6Jc2UNUqACPt61T89XtPekcM0eajL0GyhZejmxe0YlMhn6SPnbOoLRm1UbGQdGMdxrxxLZ+D9uAky2R+0EXDhI+i2dVfPXz54AkBy+QffKXRSC9xp7wY804VQKBgQDZtJ9f5fwWE2sGzCDEzHTz+MLlEJnYYqQx7UCsVoN0PmUgsJ94eWgiOqlKp90UDDFAatLtHqxC9DNrdQQuYsS/oUgD3s+YCBmcmmxkoGOKrrDNp+iSSnfW2hG60qAOSNlra94eoB+kgQw72W893kYtyuB/TE+WFHp3QwMaPxjeNwKBgQC/pFhmlTdRzqRpMOlw/V+aQt1hJFBUn+49LHfdBUTOoFscz4/JBZjSaYViq9xcbr038KDI/c4ZZKr2xe9H8q/G/YyyQfJgKNVUznjwcGXVlNBjvZvwHiQMhvLJfNYcWClsAx+itNQwhDkmpWu4r3aRCZiqJ/xzbhaohlNd0CV5OwKBgBMwwc/BRSxo/8k0mzrdzv1mkz9/7B/P6itgf4/xfFr12RI9n4EOKqjBxQSIsYs/2+OSxw8R4htwzUuOoBS6rh86R0/YBzKenCtazW09WijyZzFpuK2UlOXCiUePo34+27OFaaoHcWKd4YcxDoZEnqkQtiNiha10FquGo7Jfl4CXAoGAd8Y/ed3ItVhxaU0omXXCSqd/tTb8/eb2/0TLpVelqX6Pc3JGa10UJm3M795520ta95ts4jG+niBMue77nfwP4E6XoNGWqoLa0iY5cAzPmK1pkOzwiSJNZYbyNvvO1ehD+z34h7h85dW94mmA6ezALeXRhId5QKuNfcZ2VCvDQAECgYAg/JKcLin1mozP5ss+h1aysqFbaQrz+Djce6xMEdn7mje7ZOGlZ9+JeRJAJ6Y93VxtXnlcRkyEjyKEfGhSN2syY7C3tyVENB0FvE04qGq8M0ZnyLivmSusCCQhgi4TYUdYRvmaDibX2pZP6De54NSBqAx7ltOur6tlNRf0lre3Rg=="
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+knife4j:
+  enable: true

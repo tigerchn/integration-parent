@@ -6,8 +6,10 @@ import com.integration.common.encrypt.config.EncryptProperties;
 import com.integration.common.encrypt.core.DecryptOncePerRequestFilter;
 import com.integration.common.encrypt.core.EncryptResponseBodyAdvice;
 import jakarta.servlet.DispatcherType;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +23,7 @@ import java.util.EnumSet;
  * 装配策略：{@code decrypt-request-body-enabled=true} 才注册请求解密过滤器；
  * {@code encrypt-response-body-enabled=true} 才注册响应加密 {@code ControllerAdvice}；二者可独立开关。
  */
-@Configuration
+@AutoConfiguration(after = JacksonAutoConfiguration.class)
 @EnableConfigurationProperties(EncryptProperties.class)
 @ConditionalOnBean(ObjectMapper.class)
 @ConditionalOnProperty(prefix = "integration.encrypt", name = "enable", havingValue = "true", matchIfMissing = false)
@@ -44,8 +46,8 @@ public class IntegrationEncryptAutoConfiguration {
         @Bean
         FilterRegistrationBean<DecryptOncePerRequestFilter> decryptRequestFilterRegistration(
                 EncryptProperties properties,
-                ObjectMapper objectMapper) {
-            DecryptOncePerRequestFilter filter = new DecryptOncePerRequestFilter(properties, objectMapper);
+                PayloadAssistant payloadAssistant) {
+            DecryptOncePerRequestFilter filter = new DecryptOncePerRequestFilter(properties, payloadAssistant);
             FilterRegistrationBean<DecryptOncePerRequestFilter> registration = new FilterRegistrationBean<>(filter);
             registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 20);
             registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
@@ -58,8 +60,9 @@ public class IntegrationEncryptAutoConfiguration {
     static class EncryptAdviceAutoConfiguration {
 
         @Bean
-        EncryptResponseBodyAdvice encryptResponseBodyAdvice(EncryptProperties properties, ObjectMapper objectMapper) {
-            return new EncryptResponseBodyAdvice(properties, objectMapper);
+        EncryptResponseBodyAdvice encryptResponseBodyAdvice(EncryptProperties properties,
+                                                              PayloadAssistant payloadAssistant) {
+            return new EncryptResponseBodyAdvice(properties, payloadAssistant);
         }
     }
 

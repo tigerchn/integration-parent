@@ -12,7 +12,7 @@
 
     <artifactId>integration-common-redis-starter</artifactId>
     <name>integration-common-redis-starter</name>
-    <description>Redis template auto-configuration</description>
+    <description>Redis dependency aggregation (spring-boot-starter-data-redis + commons-pool2)</description>
 
     <dependencies>
         <dependency>

@@ -36,9 +36,6 @@ management:
       probability: 1.0
 
 integration:
-  redisson:
-    # 为 true 且 spring.data.redis 可连时注册 RedissonClient（分布式锁等）；本地无 Redis 请保持 false
-    enabled: true
   security:
     enabled: false
   openapi:

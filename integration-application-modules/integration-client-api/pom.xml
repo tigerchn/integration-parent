@@ -39,11 +39,6 @@
         </dependency>
         <dependency>
             <groupId>com.integration</groupId>
-            <artifactId>integration-common-job-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.integration</groupId>
             <artifactId>integration-common-test-starter</artifactId>
             <scope>test</scope>
         </dependency>

@@ -1,12 +1,9 @@
 package com.integration.common.encrypt.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.config.EncryptPathSupport;
 import com.integration.common.encrypt.config.EncryptProperties;
-import com.integration.common.encrypt.dto.EncryptedBody;
 import com.integration.common.encrypt.exception.EncryptException;
-import com.integration.common.encrypt.util.AesUtil;
-import com.integration.common.encrypt.util.RsaUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,11 +26,11 @@ import java.util.Locale;
 public class DecryptOncePerRequestFilter extends OncePerRequestFilter implements Ordered {
 
     private final EncryptProperties properties;
-    private final ObjectMapper objectMapper;
+    private final PayloadAssistant payloadAssistant;
 
-    public DecryptOncePerRequestFilter(EncryptProperties properties, ObjectMapper objectMapper) {
+    public DecryptOncePerRequestFilter(EncryptProperties properties, PayloadAssistant payloadAssistant) {
         this.properties = properties;
-        this.objectMapper = objectMapper;
+        this.payloadAssistant = payloadAssistant;
     }
 
     @Override
@@ -82,14 +79,7 @@ public class DecryptOncePerRequestFilter extends OncePerRequestFilter implements
         }
 
         try {
-            EncryptedBody encrypted = objectMapper.readValue(body, EncryptedBody.class);
-            if (encrypted == null || !StringUtils.hasText(encrypted.key()) || !StringUtils.hasText(encrypted.data())) {
-                throw new EncryptException("入参解密失败：请求体须为 JSON 对象且包含非空的 key、data 字段");
-            }
-
-            String aesKey = RsaUtil.decrypt(encrypted.key(), properties.getRsaPrivateKey(), properties.getRsaTransformation());
-            String realBody = AesUtil.decrypt(encrypted.data(), aesKey);
-
+            String realBody = payloadAssistant.decryptEnvelopeToPlainJson(body);
             DecryptRequestWrapper wrapper = new DecryptRequestWrapper(request, realBody);
             filterChain.doFilter(wrapper, response);
         } catch (EncryptException e) {
