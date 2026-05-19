@@ -11,7 +11,7 @@
 | `integration-common-starters` | Starter 聚合父工程（`packaging=pom`）。 |
 | `integration-common-*-starter` | 各领域自动装配（见各子模块 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`）。 |
 | `integration-modules` | 可部署模块聚合（`packaging=pom`）：应用 API、消费端、示例工程。 |
-| `integration-application-modules` | HTTP 应用（admin-api、client-api）。 |
+| `integration-api-modules` | HTTP API 应用（admin-api、client-api）。 |
 | `integration-consumer-modules` | 消费端（job-consumer、mq-consumer）。 |
 | `integration-example-modules` | 示例工程聚合；其下为可运行的 Demo 与安全样例。 |
 | `integration-demo` | 示例 Web 服务（位于 `integration-modules/integration-example-modules` 下）。 |

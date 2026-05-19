@@ -21,7 +21,7 @@
     <modules>
         <module>integration-common-core</module>
         <module>integration-common-starters</module>
-        <module>integration-modules</module>
+        <module>integration-application-modules</module>
     </modules>
 
     <properties>

@@ -6,18 +6,19 @@
 
     <parent>
         <groupId>com.integration</groupId>
-        <artifactId>integration-modules</artifactId>
+        <artifactId>integration-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>integration-application-modules</artifactId>
     <packaging>pom</packaging>
-    <name>integration-application-modules</name>
-    <description>Deployable HTTP application modules (admin API, client API)</description>
+    <name>integration-modules</name>
+    <description>Application, consumer, and example deployable modules</description>
 
     <modules>
-        <module>integration-admin-api</module>
-        <module>integration-client-api</module>
+        <module>integration-api-modules</module>
+        <module>integration-consumer-modules</module>
+        <module>integration-example-modules</module>
     </modules>
 </project>
