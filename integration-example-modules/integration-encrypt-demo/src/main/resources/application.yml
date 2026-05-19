@@ -20,7 +20,7 @@ integration:
   # 全局请求解密 / 全局响应加密；exclude-paths 对请求解密与响应加密同时生效
   encrypt:
     enable: true
-    decrypt-request-body-enabled: true
+    decrypt-request-body-enabled: false
     encrypt-response-body-enabled: false
     exclude-paths:
       - "/actuator"

@@ -92,7 +92,7 @@ integration:
 
 | 组件 | 作用 |
 |------|------|
-| `integration-common-core` | 统一返回体、错误码、业务异常、Trace 常量、断言（供其他模块与纯 Java 层使用） |
+| `integration-common-core` | 统一返回体、错误码、`IntegrationException` / `BizException`、Trace 常量、断言 |
 | `integration-common-tool-starter` | `JsonUtil`（基于 `ObjectMapper`），依赖 core |
 | `integration-common-log-starter` | Servlet 环境下 Trace 过滤器 + MDC，依赖 core |
 | `integration-common-web-starter` | `GlobalExceptionHandler`（依赖 core + log-starter） |
@@ -110,6 +110,7 @@ integration:
 ### 配置前缀示例
 
 - `integration.security.*`：是否启用安全、匿名路径、JWT issuer（`oauth2.resource-server.jwt.issuer-uri`）；启用后链路为无 Session、关闭匿名身份，并对未认证请求返回 **401**（便于 REST / JWT 场景）
+- 各 starter 领域异常应继承 `IntegrationException`（或 `BizException`），由 `integration-common-web-starter` 的 `GlobalExceptionHandler` 统一转为 `ApiResult` 与对应 HTTP 状态码
 - `integration.mybatis-plus.*`：分页开关、`DbType`、`overflow`  
 - `integration.openapi.*`：`enabled`（默认 `true`）、`title`、`version`；`enabled: false` 时关闭 api-docs 与 UI（生产可显式关闭）  
 - `integration.mail.*`：如 `fromDisplayName`  

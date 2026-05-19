@@ -1,5 +1,7 @@
 package com.integration.common.encrypt.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.integration.common.core.exception.IntegrationException;
 import com.integration.common.encrypt.assistant.PayloadAssistant;
 import com.integration.common.encrypt.config.EncryptPathSupport;
 import com.integration.common.encrypt.config.EncryptProperties;
@@ -27,10 +29,13 @@ public class DecryptOncePerRequestFilter extends OncePerRequestFilter implements
 
     private final EncryptProperties properties;
     private final PayloadAssistant payloadAssistant;
+    private final ObjectMapper objectMapper;
 
-    public DecryptOncePerRequestFilter(EncryptProperties properties, PayloadAssistant payloadAssistant) {
+    public DecryptOncePerRequestFilter(EncryptProperties properties, PayloadAssistant payloadAssistant,
+                                       ObjectMapper objectMapper) {
         this.properties = properties;
         this.payloadAssistant = payloadAssistant;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -62,30 +67,34 @@ public class DecryptOncePerRequestFilter extends OncePerRequestFilter implements
             return;
         }
 
-        if (!StringUtils.hasText(properties.getRsaPrivateKey())) {
-            throw new EncryptException("已开启请求体解密（integration.encrypt.decrypt-request-body-enabled）但未配置 rsa-private-key");
-        }
-
-        byte[] raw = request.getInputStream().readAllBytes();
-        if (raw.length == 0) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String body = new String(raw, StandardCharsets.UTF_8);
-        if (!StringUtils.hasText(body)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         try {
+            if (!StringUtils.hasText(properties.getRsaPrivateKey())) {
+                throw new EncryptException(
+                        "已开启请求体解密（integration.encrypt.decrypt-request-body-enabled）但未配置 rsa-private-key");
+            }
+
+            byte[] raw = request.getInputStream().readAllBytes();
+            if (raw.length == 0) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String body = new String(raw, StandardCharsets.UTF_8);
+            if (!StringUtils.hasText(body)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String realBody = payloadAssistant.decryptEnvelopeToPlainJson(body);
             DecryptRequestWrapper wrapper = new DecryptRequestWrapper(request, realBody);
             filterChain.doFilter(wrapper, response);
-        } catch (EncryptException e) {
-            throw e;
+        } catch (IntegrationException ex) {
+            EncryptIntegrationExceptionResponseWriter.write(
+                    request, response, objectMapper, properties, payloadAssistant, ex);
         } catch (Exception e) {
-            throw new EncryptException("入参解密失败", e);
+            EncryptIntegrationExceptionResponseWriter.write(
+                    request, response, objectMapper, properties, payloadAssistant,
+                    new EncryptException("入参解密失败", e));
         }
     }
 

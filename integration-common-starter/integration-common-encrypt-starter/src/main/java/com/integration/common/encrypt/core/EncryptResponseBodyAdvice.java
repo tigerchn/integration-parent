@@ -41,10 +41,7 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
         String path = requestPath(request);
-        if (EncryptPathSupport.matchesExclude(path, properties.getExcludePaths())) {
-            return body;
-        }
-        if (!EncryptPathSupport.matchesIncludeOrAll(path, properties.getEncryptResponsePathPatterns())) {
+        if (!EncryptResponseSupport.shouldEncryptResponse(properties, path)) {
             return body;
         }
 

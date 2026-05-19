@@ -2,7 +2,7 @@ package com.integration.common.web.exception;
 
 import com.integration.common.core.api.ApiResult;
 import com.integration.common.core.api.ResultCode;
-import com.integration.common.core.exception.BizException;
+import com.integration.common.core.exception.IntegrationException;
 import com.integration.common.core.trace.TraceConstants;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
- * 全局异常处理：将常见 Web/校验/业务异常转为统一 {@link ApiResult} 响应，并附带 traceId。
+ * 全局异常处理：将常见 Web/校验/平台 {@link IntegrationException} 转为统一 {@link ApiResult}。
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -28,18 +28,15 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
-     * 处理 {@link BizException}。
+     * 处理各 starter / 业务抛出的 {@link IntegrationException}（含 {@link com.integration.common.core.exception.BizException}）。
      */
-    @ExceptionHandler(BizException.class)
-    public ResponseEntity<ApiResult<Void>> handleBiz(BizException ex) {
-        ApiResult<Void> body = ApiResult.fail(ex.getResultCode(), ex.getMessage());
-        attachTrace(body);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    @ExceptionHandler(IntegrationException.class)
+    public ResponseEntity<ApiResult<Void>> handleIntegration(IntegrationException ex) {
+        ApiResult<Void> body = IntegrationExceptionResponseWriter.toBody(ex);
+        HttpStatus status = IntegrationExceptionResponseWriter.resolveStatus(ex);
+        return ResponseEntity.status(status).body(body);
     }
 
-    /**
-     * 处理 Bean 校验失败（请求体绑定、表单绑定等）。
-     */
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     public ResponseEntity<ApiResult<Void>> handleValidation(Exception ex) {
         String message;
@@ -61,9 +58,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    /**
-     * 处理方法级约束校验异常。
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResult<Void>> handleConstraint(ConstraintViolationException ex) {
         ApiResult<Void> body = ApiResult.fail(ResultCode.VALIDATION_ERROR, ex.getMessage());
@@ -71,9 +65,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    /**
-     * 处理请求格式错误、缺少参数、类型不匹配、非法参数等 400 场景。
-     */
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
@@ -86,9 +77,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    /**
-     * 处理静态资源未找到（如错误路径访问前端资源）。
-     */
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiResult<Void>> handleNoResource(NoResourceFoundException ex) {
         String path = ex.getResourcePath();
@@ -98,9 +86,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
-    /**
-     * 兜底处理未分类异常，记录错误日志并返回 500。
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResult<Void>> handleGeneric(Exception ex) {
         log.error("Unhandled exception", ex);
@@ -109,11 +94,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
-    /**
-     * 从 MDC 读取 traceId 写入响应体。
-     *
-     * @param body 响应体
-     */
     private static void attachTrace(ApiResult<?> body) {
         String traceId = MDC.get(TraceConstants.TRACE_ID);
         if (traceId != null) {

@@ -1,12 +1,12 @@
 package com.integration.encryptdemo.dto;
 
-public class CryptModel {
+public class EncryptModel {
 
     private String name;
 
     private String value;
 
-    public CryptModel(String name, String value) {
+    public EncryptModel(String name, String value) {
         this.name = name;
         this.value = value;
     }

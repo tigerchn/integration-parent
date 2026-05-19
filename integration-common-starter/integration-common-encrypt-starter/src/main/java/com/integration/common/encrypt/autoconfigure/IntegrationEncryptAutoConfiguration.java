@@ -46,8 +46,10 @@ public class IntegrationEncryptAutoConfiguration {
         @Bean
         FilterRegistrationBean<DecryptOncePerRequestFilter> decryptRequestFilterRegistration(
                 EncryptProperties properties,
-                PayloadAssistant payloadAssistant) {
-            DecryptOncePerRequestFilter filter = new DecryptOncePerRequestFilter(properties, payloadAssistant);
+                PayloadAssistant payloadAssistant,
+                ObjectMapper objectMapper) {
+            DecryptOncePerRequestFilter filter =
+                    new DecryptOncePerRequestFilter(properties, payloadAssistant, objectMapper);
             FilterRegistrationBean<DecryptOncePerRequestFilter> registration = new FilterRegistrationBean<>(filter);
             registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 20);
             registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
