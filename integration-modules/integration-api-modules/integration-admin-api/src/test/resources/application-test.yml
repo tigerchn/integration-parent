@@ -17,6 +17,8 @@ spring:
       - org.springframework.boot.actuate.autoconfigure.tracing.zipkin.ZipkinAutoConfiguration
 
 integration:
+  encrypt:
+    enable: false
   redisson:
     enabled: false
   admin:

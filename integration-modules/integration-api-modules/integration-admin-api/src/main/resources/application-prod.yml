@@ -1,0 +1,23 @@
+# 生产：--spring.profiles.active=prod
+# 启动前请设置下列环境变量（参见同目录 application-prod.env.example）。
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+integration:
+  admin:
+    security:
+      jwt:
+        secret: ${ADMIN_JWT_SECRET}
+        expires-in-seconds: ${ADMIN_JWT_EXPIRES_SECONDS:28800}
+  encrypt:
+    rsa-public-key: ${ENCRYPT_RSA_PUBLIC_KEY}
+    rsa-private-key: ${ENCRYPT_RSA_PRIVATE_KEY}

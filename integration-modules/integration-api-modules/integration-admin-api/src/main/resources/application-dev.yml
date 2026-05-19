@@ -1,0 +1,23 @@
+# 本地开发：spring.profiles.active=dev（默认）
+# 勿将本文件中的密钥用于生产；生产请使用 application-prod.yml + 环境变量。
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/integration_admin?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    username: root
+    password: "123456"
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+integration:
+  admin:
+    security:
+      jwt:
+        secret: "integration-admin-jwt-secret-change-me-32b!"
+        expires-in-seconds: 28800
+  encrypt:
+    # 与 integration-encrypt-demo 相同的演示密钥对，仅用于本地联调
+    rsa-public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAovmFy/msDV3bXv7nQwhtLZpb/9ypjbbjwi+5dMFqVCf9uGLCuy4MGUZ+Vk8S5JSrrs6E/iViyiwlgdIFhtos4D5XHs4tGjo0E52nZ28XnRDrE5UNKHJwRE2aTsT6GN3/jiabQ3zsS+bisIrNp0JG0hZd5XgE8wW+ZudXkb2qC0kLMfDEBrKaxNmkqZiDArmb8Fq2wy6d5f3g69yll1USQUypfu/U0WBOEgPYPADukhB2IjJbR1cPKTsTOjF/m5bhbnVcDxW1PDuFkWl4Vh7TheIF7OnORzen59YRg7nHQfeZZolOV/PK08D3HDoEJQ5mMyIkdraxAF1T1wD/GbY1rQIDAQAB"
+    rsa-private-key: "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCi+YXL+awNXdte/udDCG0tmlv/3KmNtuPCL7l0wWpUJ/24YsK7LgwZRn5WTxLklKuuzoT+JWLKLCWB0gWG2izgPlcezi0aOjQTnadnbxedEOsTlQ0ocnBETZpOxPoY3f+OJptDfOxL5uKwis2nQkbSFl3leATzBb5m51eRvaoLSQsx8MQGsprE2aSpmIMCuZvwWrbDLp3l/eDr3KWXVRJBTKl+79TRYE4SA9g8AO6SEHYiMltHVw8pOxM6MX+bluFudVwPFbU8O4WRaXhWHtOF4gXs6c5HN6fn1hGDucdB95lmiU5X88rTwPccOgQlDmYzIiR2trEAXVPXAP8ZtjWtAgMBAAECggEARhghtqAUos8aWdoyZv9JzdJU/U/P0Pa3ML7L+e5yJ+3nTxWTAWSFqZ1LGx35VzymNpH2W0SDH8cq/pHw9JYDtRK677Hnbh9YZJNq+66pLlGneY2i0iGeLZJe6sAHfQiGMIJkRvuEugR8vUeFuglkYlliWx5qqodu491eKX20lBNPYO1+RzAXF7m2O/0cM3s4kOGbJWVEVFvS4XnMdsRSMeWJUVFMS6Jc2UNUqACPt61T89XtPekcM0eajL0GyhZejmxe0YlMhn6SPnbOoLRm1UbGQdGMdxrxxLZ+D9uAky2R+0EXDhI+i2dVfPXz54AkBy+QffKXRSC9xp7wY804VQKBgQDZtJ9f5fwWE2sGzCDEzHTz+MLlEJnYYqQx7UCsVoN0PmUgsJ94eWgiOqlKp90UDDFAatLtHqxC9DNrdQQuYsS/oUgD3s+YCBmcmmxkoGOKrrDNp+iSSnfW2hG60qAOSNlra94eoB+kgQw72W893kYtyuB/TE+WFHp3QwMaPxjeNwKBgQC/pFhmlTdRzqRpMOlw/V+aQt1hJFBUn+49LHfdBUTOoFscz4/JBZjSaYViq9xcbr038KDI/c4ZZKr2xe9H8q/G/YyyQfJgKNVUznjwcGXVlNBjvZvwHiQMhvLJfNYcWClsAx+itNQwhDkmpWu4r3aRCZiqJ/xzbhaohlNd0CV5OwKBgBMwwc/BRSxo/8k0mzrdzv1mkz9/7B/P6itgf4/xfFr12RI9n4EOKqjBxQSIsYs/2+OSxw8R4htwzUuOoBS6rh86R0/YBzKenCtazW09WijyZzFpuK2UlOXCiUePo34+27OFaaoHcWKd4YcxDoZEnqkQtiNiha10FquGo7Jfl4CXAoGAd8Y/ed3ItVhxaU0omXXCSqd/tTb8/eb2/0TLpVelqX6Pc3JGa10UJm3M795520ta95ts4jG+niBMue77nfwP4E6XoNGWqoLa0iY5cAzPmK1pkOzwiSJNZYbyNvvO1ehD+z34h7h85dW94mmA6ezALeXRhId5QKuNfcZ2VCvDQAECgYAg/JKcLin1mozP5ss+h1aysqFbaQrz+Djce6xMEdn7mje7ZOGlZ9+JeRJAJ6Y93VxtXnlcRkyEjyKEfGhSN2syY7C3tyVENB0FvE04qGq8M0ZnyLivmSusCCQhgi4TYUdYRvmaDibX2pZP6De54NSBqAx7ltOur6tlNRf0lre3Rg=="

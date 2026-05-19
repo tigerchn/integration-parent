@@ -1,0 +1,25 @@
+# 生产：--spring.profiles.active=prod
+# 启动前请设置下列环境变量（参见同目录 application-prod.env.example）。
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+integration:
+  client:
+    wechat:
+      mini-program:
+        app-id: ${WX_MINI_APP_ID}
+        app-secret: ${WX_MINI_APP_SECRET}
+        mock-enabled: false
+    security:
+      jwt:
+        secret: ${CLIENT_JWT_SECRET}
+        expires-in-seconds: ${CLIENT_JWT_EXPIRES_SECONDS:604800}
