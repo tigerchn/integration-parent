@@ -51,7 +51,7 @@ integration-modules/integration-example-modules/integration-demo/target/integrat
 运行：
 
 ```bash
-java -jar integration-modules/integration-modules/integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
+java -jar integration-modules/integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
 ```
 
 开发态：

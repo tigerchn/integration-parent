@@ -6,19 +6,18 @@
 
     <parent>
         <groupId>com.integration</groupId>
-        <artifactId>integration-parent</artifactId>
+        <artifactId>integration-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>integration-application-modules</artifactId>
+    <artifactId>integration-consumer-modules</artifactId>
     <packaging>pom</packaging>
-    <name>integration-modules</name>
-    <description>Application, consumer, and example deployable modules</description>
+    <name>integration-consumer-modules</name>
+    <description>Deployable consumer applications (scheduled jobs, message queue)</description>
 
     <modules>
-        <module>integration-api-modules</module>
-        <module>integration-consumer-modules</module>
-        <module>integration-example-modules</module>
+        <module>integration-job-consumer</module>
+        <module>integration-mq-consumer</module>
     </modules>
 </project>

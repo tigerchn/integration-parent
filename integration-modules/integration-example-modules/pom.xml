@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.integration</groupId>
-        <artifactId>integration-application-modules</artifactId>
+        <artifactId>integration-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
