@@ -20,10 +20,8 @@
 
     <modules>
         <module>integration-common-core</module>
-        <module>integration-common-starter</module>
-        <module>integration-application-modules</module>
-        <module>integration-consumer-modules</module>
-        <module>integration-example-modules</module>
+        <module>integration-common-starters</module>
+        <module>integration-modules</module>
     </modules>
 
     <properties>

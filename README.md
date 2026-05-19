@@ -8,11 +8,14 @@
 |------|------|
 | `integration-parent` | 聚合工程；继承 `spring-boot-starter-parent`；**同一 POM 内集中 `dependencyManagement`**（第三方 + 内部 artifact 版本）。 |
 | `integration-common-core` | **无 Spring** 的共享内核：`ApiResult`、`ResultCode`、`BizException`、`TraceConstants`、`IntegrationAsserts`。 |
-| `integration-common-starter` | Starter 聚合父工程（`packaging=pom`）。 |
+| `integration-common-starters` | Starter 聚合父工程（`packaging=pom`）。 |
 | `integration-common-*-starter` | 各领域自动装配（见各子模块 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`）。 |
-| `integration-example-modules` | 示例工程聚合父模块（`packaging=pom`）；其下为可运行的 Demo 与安全样例。 |
-| `integration-demo` | 示例 Web 服务（位于 `integration-example-modules` 下），演示依赖组合与接口写法。 |
-| `integration-security-sample` | 独立进程示例（位于 `integration-example-modules` 下）：`integration.security.enabled=true`，演示匿名路径与需认证路径（可选接入 JWT issuer）。 |
+| `integration-modules` | 可部署模块聚合（`packaging=pom`）：应用 API、消费端、示例工程。 |
+| `integration-application-modules` | HTTP 应用（admin-api、client-api）。 |
+| `integration-consumer-modules` | 消费端（job-consumer、mq-consumer）。 |
+| `integration-example-modules` | 示例工程聚合；其下为可运行的 Demo 与安全样例。 |
+| `integration-demo` | 示例 Web 服务（位于 `integration-modules/integration-example-modules` 下）。 |
+| `integration-security-sample` | 安全 Starter 联调样例（同上路径下）。 |
 
 ### 关于独立的 `integration-dependencies` BOM
 
@@ -42,13 +45,13 @@ mvn clean package -pl :integration-demo -am
 Demo 可执行 JAR：
 
 ```text
-integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
+integration-modules/integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
 ```
 
 运行：
 
 ```bash
-java -jar integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
+java -jar integration-modules/integration-modules/integration-example-modules/integration-demo/target/integration-demo-1.0.0-SNAPSHOT.jar
 ```
 
 开发态：
