@@ -22,6 +22,7 @@
         <module>integration-common-core</module>
         <module>integration-common-starter</module>
         <module>integration-application-modules</module>
+        <module>integration-consumer-modules</module>
         <module>integration-example-modules</module>
     </modules>
 
