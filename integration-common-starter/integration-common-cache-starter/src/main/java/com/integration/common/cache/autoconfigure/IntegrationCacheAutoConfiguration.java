@@ -17,6 +17,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @ConditionalOnClass({CacheManager.class, Caffeine.class})
 @EnableCaching
 @EnableConfigurationProperties(IntegrationCacheProperties.class)
-@ConditionalOnProperty(prefix = "integration.cache", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "integration.cache", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class IntegrationCacheAutoConfiguration {
 }

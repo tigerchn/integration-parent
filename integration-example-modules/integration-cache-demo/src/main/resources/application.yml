@@ -6,7 +6,7 @@ spring:
     name: integration-cache-demo
   cache:
     caffeine:
-      spec: maximumSize=10000,expireAfterWrite=1m
+      spec: maximumSize=10000,expireAfterWrite=10m
 
 management:
   endpoints:
@@ -18,6 +18,9 @@ integration:
   openapi:
     title: Integration Cache Demo API
     version: 1.0.0
+  cache:
+    # false：应用可正常启动，/api/cache-demo 等演示接口不注册；true：启用 Caffeine + 演示 API
+    enabled: false
 
 springdoc:
   swagger-ui:
